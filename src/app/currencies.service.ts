@@ -28,9 +28,6 @@ export class CurrenciesService {
     }
 
     get(currency: Currency): Observable<Currency> {
-        let params = new HttpParams();
-        params.set("id", currency.id);
-
         return this.http.get('https://api.coinlore.net/api/ticker/?id=' + currency.id).pipe(map((res: any) =>
         ({
             id: res[0].id,

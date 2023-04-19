@@ -22,7 +22,7 @@
                 <td>{{currency.cap}}</td>
                 <td [class]="styleTrend(currency.percentChange24h)">{{currency.percentChange24h}}</td>
                 <td [class]="styleTrend(currency.percentChange7d)">{{currency.percentChange7d}}</td>
-                <td><input type="checkbox" (change) = "onCurrencySelect($event, currency)"></td>
+                <td><input type="checkbox" [ngModel]="currency.selected" (change) = "onCurrencySelect($event, currency)"></td>
             </tr>
         </tbody>
     </table>
