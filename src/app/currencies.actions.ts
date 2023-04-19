@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { Currency } from './model/currency';
+import { Currency } from './currency/model/currency';
 
 export const add = createAction('[Counter Component] Add', props<{currency : Currency}>());
 export const del = createAction('[Counter Component] Delete', props<{currency : Currency}>());

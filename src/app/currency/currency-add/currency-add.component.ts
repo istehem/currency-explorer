@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { State } from 'src/app/model/state';
-import { Currency } from 'src/app/model/currency';
+import { Currency } from 'src/app/currency/model/currency';
 import { add } from 'src/app/currencies.actions';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 

@@ -3,7 +3,7 @@ import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { addToFavorites, load, removeFromFavorites } from 'src/app/currencies.actions';
 import { selectCurrencies } from 'src/app/currency.selectors';
-import { Currency } from 'src/app/model/currency';
+import { Currency } from 'src/app/currency/model/currency';
 import { State } from 'src/app/model/state';
 import { CurrencyUtil } from '../currency-util';
 

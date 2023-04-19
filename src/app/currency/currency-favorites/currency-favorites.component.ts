@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Currency } from 'src/app/model/currency';
+import { Currency } from 'src/app/currency/model/currency';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { State } from 'src/app/model/state';

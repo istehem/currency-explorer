@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http"
-import { Currency } from "./model/currency";
+import { Currency } from "./currency/model/currency";
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { HttpParams } from "@angular/common/http";

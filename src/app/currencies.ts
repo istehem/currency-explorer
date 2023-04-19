@@ -2,7 +2,7 @@ import { Action, createReducer, on } from "@ngrx/store";
 import { CurrencyActionType } from "./model/currency.action.type";
 import { add, addAllToFavorites, addToFavorites, del, edit, loadSuccess, refreshCurrencySuccess, removeFromFavorites } from "./currencies.actions";
 import { State } from "./model/state";
-import { Currency } from "./model/currency";
+import { Currency } from "./currency/model/currency";
 
 export const initialState: State = { currencies: [], selectedCurrencies: [] };
 
