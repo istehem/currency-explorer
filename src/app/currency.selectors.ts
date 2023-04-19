@@ -14,6 +14,10 @@ export const selectFavoriteCurrencies = createSelector(
     selectCurrencyState, (state: CurrencyState) => currencyAdapter.getSelectors().selectAll(state)
         .filter(x => x.selected === true)
 );
+
+export const isLoaded = createSelector(
+    selectCurrencyState, (state: CurrencyState) => state.loaded
+);
     
     
     

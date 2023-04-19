@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { edited, load } from 'src/app/currencies.actions';
-import { selectCurrencies } from 'src/app/currency.selectors';
+import { isLoaded, selectCurrencies } from 'src/app/currency.selectors';
 import { Currency } from 'src/app/currency/model/currency';
 import { CurrencyUtil } from '../currency-util';
 import { CurrencyState } from '../model/currency.state';
@@ -22,7 +22,11 @@ export class CurrencyViewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store.dispatch(load());
+    this.store.pipe(select(isLoaded)).subscribe(loaded => {
+      if (!loaded) {
+        this.store.dispatch(load());
+      }
+    });
   }
 
   load(): void {
@@ -34,11 +38,11 @@ export class CurrencyViewComponent implements OnInit {
   }
 
   onCurrencySelect(event: any, selectedCurrency: Currency) {
-    let currency : Update<Currency> = {
-      id : selectedCurrency.id,
-      changes : {selected : event.target.checked }
+    let currency: Update<Currency> = {
+      id: selectedCurrency.id,
+      changes: { selected: event.target.checked }
     }
-    
+
     this.store.dispatch(edited({ currency }));
   }
 
