@@ -1,0 +1,6 @@
+.refresh-button {
+    width: 15px;
+    height: 15px;
+    background: url(/assets/icons/refresh.png);
+    background-size: 15px auto;
+}

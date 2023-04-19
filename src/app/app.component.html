@@ -1,0 +1,18 @@
+<div style="text-align:center">
+    <h1>
+        Welcome to {{ title }}!
+    </h1>
+</div>
+<hr />
+<nav class="mb-3">
+    <div class="container">
+        <div class="row">
+            <a routerLink="/favorites" class="btn btn-primary col-5">Favorites</a>
+            <div class="col-2">
+            </div>
+            <a routerLink="/select" class="btn btn-primary col-5">Select</a>
+        </div>
+    </div>
+</nav>
+<hr />
+<router-outlet></router-outlet>
