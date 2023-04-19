@@ -21,7 +21,8 @@ export class CurrenciesService {
                     price: item.price_usd,
                     cap: item.market_cap_usd,
                     percentChange7d: item.percent_change_7d,
-                    percentChange24h: item.percent_change_24h
+                    percentChange24h: item.percent_change_24h,
+                    selected: false
                 });
             })));
     }
@@ -38,7 +39,8 @@ export class CurrenciesService {
             price: res[0].price_usd,
             cap: res[0].market_cap_usd,
             percentChange7d: res[0].percent_change_7d,
-            percentChange24h: res[0].percent_change_24h
+            percentChange24h: res[0].percent_change_24h,
+            selected : currency.selected
         })));
     }
 }

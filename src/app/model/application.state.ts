@@ -1,7 +1,5 @@
-import { EntityState } from "@ngrx/entity";
-import { State } from "./state";
+import { CurrencyState } from "../currency/model/currency.state";
 
-
-export interface ApplicationState extends EntityState<State> {
-
+export interface ApplicationState {
+    currencies : CurrencyState
 } 

@@ -1,16 +1,18 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
-import { State, currencyFeatureKey } from "./model/state";
+import { CurrencyState, currencyStateFeatureKey } from "./currency/model/currency.state";
+import { currencyAdapter } from "./currencies";
 
-export const selectCurrencyState = createFeatureSelector<State>(
-    currencyFeatureKey
+export const selectCurrencyState = createFeatureSelector<CurrencyState>(
+    currencyStateFeatureKey
 );
 
 export const selectCurrencies = createSelector(
-    selectCurrencyState, (state: State) => state.currencies
+    selectCurrencyState, (state: CurrencyState) => currencyAdapter.getSelectors().selectAll(state)
 );
  
 export const selectFavoriteCurrencies = createSelector(
-    selectCurrencyState, (state: State) => state.selectedCurrencies
+    selectCurrencyState, (state: CurrencyState) => currencyAdapter.getSelectors().selectAll(state)
+        .filter(x => x.selected === true)
 );
     
     

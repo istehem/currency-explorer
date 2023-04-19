@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { State } from 'src/app/model/state';
 import { Currency } from 'src/app/currency/model/currency';
 import { add } from 'src/app/currencies.actions';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { CurrencyState } from '../model/currency.state';
 
 @Component({
   selector: 'app-currency-add',
@@ -20,7 +20,7 @@ export class CurrencyAddComponent {
     id: new FormControl(null, [Validators.required]),
   });
 
-  constructor(private store: Store<State>) {
+  constructor(private store: Store<CurrencyState>) {
   }
 
   addCurrency(): void {
@@ -35,7 +35,8 @@ export class CurrencyAddComponent {
         symbol: validatedId,
         cap: -1,
         percentChange24h: -1,
-        percentChange7d: -1
+        percentChange7d: -1,
+        selected: false
       }
       this.showWarning = false;
       this.store.dispatch(add({ currency }));

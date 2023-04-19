@@ -5,5 +5,6 @@ export interface Currency {
     price: number,
     cap: number,
     percentChange7d: number,
-    percentChange24h: number
+    percentChange24h: number,
+    selected : boolean
 }
