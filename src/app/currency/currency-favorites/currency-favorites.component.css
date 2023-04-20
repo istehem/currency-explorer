@@ -5,7 +5,9 @@
     background-size: 15px auto;
 }
 
-tr:hover {
-    background: #D3D3D3;
-    cursor: pointer;
+.inspect-button {
+    width: 15px;
+    height: 15px;
+    background: url(/assets/icons/search.png);
+    background-size: 15px auto;
 }

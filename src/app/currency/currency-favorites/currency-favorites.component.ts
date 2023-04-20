@@ -31,7 +31,7 @@ export class CurrencyFavoritesComponent {
     this.store.dispatch(refreshCurrency({currency}));   
   }
   
-  log (currency : Currency) {
+  inspect (currency : Currency) {
     this.router.navigate(["favorites", "currency-details", currency.id]);
   }
 }

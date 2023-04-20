@@ -9,9 +9,10 @@
             <th scope="col">Trend 24 hours (%)</th>
             <th scope="col">Trend 7 days (%)</th>
             <th scope="col">Reload</th>
+            <th scope="col">Inspect</th>
         </thead>
         <tbody>
-            <tr *ngFor="let currency  of currencies$  | async ; let i=index" (click)="log(currency)">
+            <tr *ngFor="let currency  of currencies$  | async ; let i=index">
                 <th scope="row">{{i + 1}}.</th>
                 <td>{{currency.symbol}}</td>
                 <td>{{currency.name}}</td>
@@ -21,6 +22,9 @@
                 <td [class]="styleTrend(currency.percentChange7d)">{{currency.percentChange7d}}</td>
                 <td>
                     <div type="button" class="refresh-button" (click)="refresh(currency)"></div>
+                </td>
+                <td>
+                    <div type="button" class="inspect-button" (click)="inspect(currency)"></div>
                 </td>
             </tr>
         </tbody>
