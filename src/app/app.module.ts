@@ -13,10 +13,11 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { RouterModule } from '@angular/router';
 import { appRoutes } from "./routes";
+import { NotFoundComponentComponent } from './not-found-component/not-found-component.component';
 
 
 @NgModule({
-    declarations: [AppComponent],
+    declarations: [AppComponent, NotFoundComponentComponent],
     providers: [],
     bootstrap: [AppComponent],
     imports: [BrowserModule, 

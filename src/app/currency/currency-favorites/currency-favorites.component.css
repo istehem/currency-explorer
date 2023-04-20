@@ -4,3 +4,8 @@
     background: url(/assets/icons/refresh.png);
     background-size: 15px auto;
 }
+
+tr:hover {
+    background: #D3D3D3;
+    cursor: pointer;
+}

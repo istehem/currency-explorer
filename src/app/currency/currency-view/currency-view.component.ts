@@ -45,5 +45,4 @@ export class CurrencyViewComponent implements OnInit {
 
     this.store.dispatch(edited({ currency }));
   }
-
 }

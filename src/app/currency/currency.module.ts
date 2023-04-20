@@ -9,9 +9,10 @@ import { EffectsModule } from '@ngrx/effects';
 import { CurrencyEffects } from "../currency.effects";
 import { CurrencyFavoritesComponent } from './currency-favorites/currency-favorites.component';
 import { currencyStateFeatureKey } from "./model/currency.state";
+import { CurrencyDetailsComponent } from './currency-favorites/currency-details/currency-details.component';
 
 @NgModule({
-    declarations: [CurrencyViewComponent, CurrencyAddComponent, CurrencyFavoritesComponent],
+    declarations: [CurrencyViewComponent, CurrencyAddComponent, CurrencyFavoritesComponent, CurrencyDetailsComponent],
     imports: [
         CommonModule,
         StoreModule.forFeature(currencyStateFeatureKey, reducer),

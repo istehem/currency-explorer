@@ -8,10 +8,10 @@
             <th scope="col">Market Cap (USD)</th>
             <th scope="col">Trend 24 hours (%)</th>
             <th scope="col">Trend 7 days (%)</th>
-            <th scope="col">Reload</th>   
+            <th scope="col">Reload</th>
         </thead>
         <tbody>
-            <tr *ngFor="let currency of currencies$ | async; let i=index">
+            <tr *ngFor="let currency  of currencies$  | async ; let i=index" (click)="log(currency)">
                 <th scope="row">{{i + 1}}.</th>
                 <td>{{currency.symbol}}</td>
                 <td>{{currency.name}}</td>
@@ -19,7 +19,9 @@
                 <td>{{currency.cap}}</td>
                 <td [class]="styleTrend(currency.percentChange24h)">{{currency.percentChange24h}}</td>
                 <td [class]="styleTrend(currency.percentChange7d)">{{currency.percentChange7d}}</td>
-                <td><div type="button" class="refresh-button" (click)="refresh(currency)"></div></td>
+                <td>
+                    <div type="button" class="refresh-button" (click)="refresh(currency)"></div>
+                </td>
             </tr>
         </tbody>
     </table>
