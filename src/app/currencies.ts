@@ -1,5 +1,5 @@
-import { Action, createReducer, on } from "@ngrx/store";
-import { add, del, edited, loadSuccess, upsert } from "./currencies.actions";
+import { Action, UPDATE, createReducer, on } from "@ngrx/store";
+import { add, del, edited, loadSuccess, reloadSuccess, upsert } from "./currencies.actions";
 import { Currency } from "./currency/model/currency";
 import { EntityAdapter, createEntityAdapter, Update } from '@ngrx/entity';
 import { CurrencyState } from "./currency/model/currency.state";
@@ -34,12 +34,31 @@ function loadCurrencies(currencies: Currency[], state: CurrencyState){
   return setLoaded(true, addAllCurrencies(currencies, state));
 }
 
+function reloadCurrencies(currencies: Currency[], state: CurrencyState){
+    currencies.forEach(x => {
+      let toUpdate : Update<Currency> = 
+        { id : x.id, changes: {
+          id: x.id,
+          symbol: x.symbol,
+          name: x.name,
+          price: x.price,
+          cap: x.cap,
+          percentChange7d: x.percentChange7d,
+          percentChange24h: x.percentChange24h
+        }} 
+        state = currencyAdapter.updateOne(toUpdate, state);
+    });
+    return state;
+}
+
 export const currencies = createReducer(initialState,
   on(add, (state, { currency }) => addCurrency(currency, state)),
   on(del, (state) => state),
   on(edited, (state, { currency }) => editCurrency(currency, state)),
   on(loadSuccess, (state, { currencies }) => loadCurrencies(currencies, state)),
-  on(upsert, (state, { currency }) => upsertCurrency(currency, state)));
+  on(upsert, (state, { currency }) => upsertCurrency(currency, state)),
+  on(reloadSuccess, (state, { currencies }) => reloadCurrencies(currencies, state))
+  );
 
 export function reducer(state: CurrencyState | undefined, action: Action): CurrencyState {
   return currencies(state, action);

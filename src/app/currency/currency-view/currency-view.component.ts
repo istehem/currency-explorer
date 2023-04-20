@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { edited, load } from 'src/app/currencies.actions';
+import { edited, load, reload } from 'src/app/currencies.actions';
 import { isLoaded, selectCurrencies } from 'src/app/currency.selectors';
 import { Currency } from 'src/app/currency/model/currency';
 import { CurrencyUtil } from '../currency-util';
@@ -29,8 +29,8 @@ export class CurrencyViewComponent implements OnInit {
     });
   }
 
-  load(): void {
-    this.store.dispatch(load());
+  reload(): void {
+    this.store.dispatch(reload());
   }
 
   styleTrend(percent: number): string[] {
