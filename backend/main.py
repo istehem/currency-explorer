@@ -9,9 +9,15 @@ api = Api(app)
 
 db = dict()
 
+class Date(fields.Raw):
+    def format(self, value):
+        if not value or not isinstance(value, datetime):
+            raise ValueError("Value must not be null and must be of type 'datetime'")
+        return value.isoformat()
+
 price_fields = {}
 price_fields['price'] = fields.String
-price_fields['timestamp'] = fields.DateTime(dt_format='rfc822')
+price_fields['timestamp'] = Date
 
 currency_fields = {
     'id':    fields.String,
@@ -46,7 +52,7 @@ class SingleCurrency(Resource):
     @marshal_with(currency_fields)
     def get(self, currency_id):
         if not currency_id in db:
-            raise NotFound("Page Not Found")
+            raise NotFound("Entry Not Found")
         return db[currency_id]
     @marshal_with(currency_fields)    
     def post(self, currency_id):
@@ -63,18 +69,8 @@ class SingleCurrency(Resource):
         currency.new_price(price)
         return currency    
 
-class AllCurrencies(Resource):
-    @marshal_with(currencies_fields)
-    def get(self):
-        return f'{{ "data": {db.items()}}}'
-    
-
 api.add_resource(Status, '/status')
-
 api.add_resource(SingleCurrency, '/currencies/<string:currency_id>')
-
-api.add_resource(AllCurrencies, '/currencies/')
-
 
 if __name__ == '__main__':
     app.run(debug=True)
