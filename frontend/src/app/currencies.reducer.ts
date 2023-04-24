@@ -1,11 +1,10 @@
-import { Action, UPDATE, createReducer, on } from "@ngrx/store";
+import { Action, createReducer, on } from "@ngrx/store";
 import { add, del, edited, loadSuccess, reloadSuccess, upsert } from "./currencies.actions";
 import { Currency } from "./currency/model/currency";
 import { EntityAdapter, createEntityAdapter, Update } from '@ngrx/entity';
 import { CurrencyState } from "./currency/model/currency.state";
 
-export const currencyAdapter: EntityAdapter<Currency> = createEntityAdapter<Currency>({
-});
+export const currencyAdapter: EntityAdapter<Currency> = createEntityAdapter<Currency>({});
 
 export const initialState: CurrencyState = currencyAdapter.getInitialState({loaded : false});
 

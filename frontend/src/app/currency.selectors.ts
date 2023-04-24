@@ -1,6 +1,6 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
 import { CurrencyState, currencyStateFeatureKey } from "./currency/model/currency.state";
-import { currencyAdapter } from "./currencies";
+import { currencyAdapter } from "./currencies.reducer";
 
 export const selectCurrencyState = createFeatureSelector<CurrencyState>(
     currencyStateFeatureKey

@@ -7,6 +7,8 @@ import { Currency } from 'src/app/currency/model/currency';
 import { CurrencyUtil } from '../currency-util';
 import { CurrencyState } from '../model/currency.state';
 import { Update } from '@ngrx/entity';
+import { CurrencyHistory } from '../model/currency.history';
+import { add } from 'src/app/currency.history.actions';
 
 @Component({
   selector: 'app-currency-view',
@@ -17,7 +19,7 @@ export class CurrencyViewComponent implements OnInit {
 
   currencies$: Observable<Currency[]>;
 
-  constructor(private store: Store<CurrencyState>) {
+  constructor(private store: Store<CurrencyState>, private historyStore: Store<CurrencyHistory>) {
     this.currencies$ = this.store.pipe(select(selectCurrencies));
   }
 
@@ -44,5 +46,7 @@ export class CurrencyViewComponent implements OnInit {
     }
 
     this.store.dispatch(edited({ currency }));
+    this.historyStore.dispatch(add({ currency: selectedCurrency  }));
+
   }
 }
