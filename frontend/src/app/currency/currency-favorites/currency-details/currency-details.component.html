@@ -1,5 +1,3 @@
 <h2>{{  currencyId  }}</h2>
 <h4>{{  history?.price?.price  }} USD</h4>
-<div *ngFor="let price  of history?.price_history">
-    <div>{{price.timestamp}}: {{price.price}}</div>
-</div>
+<div echarts [options]="options" class="demo-chart"></div>

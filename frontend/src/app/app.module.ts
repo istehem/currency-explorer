@@ -10,6 +10,8 @@ import { AlertModule } from 'ngx-bootstrap/alert';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
 import { EffectsModule } from '@ngrx/effects';
 import { HttpClientModule } from '@angular/common/http';
+import { NgxEchartsModule } from 'ngx-echarts';
+
 
 import { RouterModule } from '@angular/router';
 import { appRoutes } from "./routes";
@@ -28,6 +30,9 @@ import { NotFoundComponentComponent } from './not-found-component/not-found-comp
         AlertModule.forRoot(),
         ButtonsModule.forRoot(),
         HttpClientModule,
-        RouterModule.forRoot(appRoutes)
+        RouterModule.forRoot(appRoutes),
+        NgxEchartsModule.forRoot({
+            echarts: () => import('echarts')
+        })
     ]})
 export class AppModule { }

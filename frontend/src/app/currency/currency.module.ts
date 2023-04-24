@@ -13,6 +13,7 @@ import { currencyHistoryStateFeatureKey } from "./model/currency.history.state";
 import { CurrencyHistoryEffects } from "../currency.history.effects";
 import { currencyReducer } from "../currencies.reducer";
 import { historyReducer } from "../currency.history.reducer";
+import { NgxEchartsModule } from 'ngx-echarts';
 
 @NgModule({
     declarations: [CurrencyViewComponent, CurrencyAddComponent, CurrencyFavoritesComponent, CurrencyDetailsComponent],
@@ -21,6 +22,7 @@ import { historyReducer } from "../currency.history.reducer";
         StoreModule.forFeature(currencyStateFeatureKey, currencyReducer),
         StoreModule.forFeature(currencyHistoryStateFeatureKey, historyReducer),
         EffectsModule.forFeature([CurrencyEffects, CurrencyHistoryEffects]),
+        NgxEchartsModule.forChild(),
         FormsModule,
         ReactiveFormsModule
     ],
