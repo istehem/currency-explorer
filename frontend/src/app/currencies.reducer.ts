@@ -59,6 +59,6 @@ export const currencies = createReducer(initialState,
   on(reloadSuccess, (state, { currencies }) => reloadCurrencies(currencies, state))
   );
 
-export function reducer(state: CurrencyState | undefined, action: Action): CurrencyState {
+export function currencyReducer(state: CurrencyState | undefined, action: Action): CurrencyState {
   return currencies(state, action);
 }

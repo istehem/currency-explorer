@@ -1,10 +1,10 @@
 export interface Price {
     price: number,
-    date: Date
+    timestamp: Date
 }
 
 export interface CurrencyHistory {   
-    id: number,
+    id: string,
     price: Price,
     price_history: Price[]
 }

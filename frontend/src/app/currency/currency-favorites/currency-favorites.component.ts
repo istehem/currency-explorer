@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Currency } from 'src/app/currency/model/currency';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { selectFavoriteCurrencies } from 'src/app/currency.selectors';
+import { selectFavoriteCurrencies } from 'src/app/currencies.selectors';
 import { CurrencyUtil } from '../currency-util';
 import { refreshCurrency } from 'src/app/currencies.actions';
 import { CurrencyState } from '../model/currency.state';
@@ -32,6 +32,6 @@ export class CurrencyFavoritesComponent {
   }
   
   inspect (currency : Currency) {
-    this.router.navigate(["favorites", "currency-details", currency.id]);
+    this.router.navigate(["favorites", "currency-details", currency.symbol]);
   }
 }

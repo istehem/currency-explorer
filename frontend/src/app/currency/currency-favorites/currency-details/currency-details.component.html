@@ -1,1 +1,5 @@
-<h2>{{  currencySymbol }}</h2>
+<h2>{{  currencyId  }}</h2>
+<h4>{{  history?.price?.price  }} USD</h4>
+<div *ngFor="let price  of history?.price_history">
+    <div>{{price.timestamp}}: {{price.price}}</div>
+</div>

@@ -9,19 +9,22 @@ import { EMPTY } from 'rxjs';
 export class CurrencyHistoryEffects {
 
     addHistory$ = createEffect(() =>
-    this.actions$.pipe(
-        ofType(add),
-        mergeMap(({ currency }) => this.currencyHistoryService.add(currency)
-            .pipe(
-                map(currencyHistory => addSuccess({ currencyHistory: currencyHistory })),
-                catchError(() => EMPTY)
-            ))
-    )
-);
+        this.actions$.pipe(
+            ofType(add),
+            mergeMap(({ currency }) => this.currencyHistoryService.add(currency)
+                .pipe(
+                    map(currencyHistory => {
+                        let result = addSuccess({ currencyHistory: currencyHistory });
+                        return result;
+                    }),
+                    catchError(() => EMPTY)
+                ))
+        )
+    );
 
-constructor(
-    private actions$: Actions,
-    private currencyHistoryService: CurrencyHistoryService
-) { }
+    constructor(
+        private actions$: Actions,
+        private currencyHistoryService: CurrencyHistoryService
+    ) { }
 
 }

@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { edited, load, reload } from 'src/app/currencies.actions';
-import { isLoaded, selectCurrencies } from 'src/app/currency.selectors';
+import { isLoaded, selectCurrencies } from 'src/app/currencies.selectors';
 import { Currency } from 'src/app/currency/model/currency';
 import { CurrencyUtil } from '../currency-util';
 import { CurrencyState } from '../model/currency.state';
 import { Update } from '@ngrx/entity';
-import { CurrencyHistory } from '../model/currency.history';
 import { add } from 'src/app/currency.history.actions';
+import { CurrencyHistoryState } from '../model/currency.history.state';
 
 @Component({
   selector: 'app-currency-view',
@@ -19,7 +19,7 @@ export class CurrencyViewComponent implements OnInit {
 
   currencies$: Observable<Currency[]>;
 
-  constructor(private store: Store<CurrencyState>, private historyStore: Store<CurrencyHistory>) {
+  constructor(private store: Store<CurrencyState>, private historyStore: Store<CurrencyHistoryState>) {
     this.currencies$ = this.store.pipe(select(selectCurrencies));
   }
 
@@ -44,9 +44,9 @@ export class CurrencyViewComponent implements OnInit {
       id: selectedCurrency.id,
       changes: { selected: event.target.checked }
     }
-
-    this.store.dispatch(edited({ currency }));
-    this.historyStore.dispatch(add({ currency: selectedCurrency  }));
-
+    if (event.target.checked) {
+      this.store.dispatch(edited({ currency }));
+      this.historyStore.dispatch(add({ currency: selectedCurrency  }));
+    }
   }
 }

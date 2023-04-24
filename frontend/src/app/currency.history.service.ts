@@ -12,7 +12,6 @@ export class CurrencyHistoryService {
     constructor(private http: HttpClient) { }
 
     add(currency: Currency): Observable<CurrencyHistory> {
-        console.log("Second store effect works!")
         let headers = new HttpHeaders();
         headers.append("Content-Type", "application/json");
         return this.http.post('http://127.0.0.1:5000/currencies/' + currency.symbol,

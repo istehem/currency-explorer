@@ -1,10 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap, Params, Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
-import { CurrencyState } from '../../model/currency.state';
-import { selectCurrenciesAsDict, selectCurrencyById } from 'src/app/currency.selectors';
-import { Currency } from '../../model/currency';
 import { Observable } from 'rxjs';
+import { CurrencyHistoryState } from '../../model/currency.history.state';
+import { CurrencyHistory } from '../../model/currency.history';
+import { selectCurrencyHistoryById } from 'src/app/currency.history.selectors';
 
 @Component({
   selector: 'app-currency-details',
@@ -12,37 +12,24 @@ import { Observable } from 'rxjs';
   styleUrls: ['./currency-details.component.css']
 })
 export class CurrencyDetailsComponent implements OnInit {
-  currencyId: number = 0;
-  route: ActivatedRoute;
-  router: Router;
-  currency$!: Observable<Currency>;
-  currencySymbol: any;
+  currencyId: string = '';
+  history$: Observable<CurrencyHistory | undefined>;
+  history: CurrencyHistory | undefined;
 
-  private store: Store<CurrencyState>
-
-  constructor(store: Store<CurrencyState>, route: ActivatedRoute, router: Router) {
-    this.store = store;
-    this.route = route;
-    this.router = router;
-
-    this.route.params.subscribe((params: Params) => {
-      this.currencyId = params['id'];
-      this.store.pipe(select(selectCurrencyById(this.currencyId)))
-        .subscribe(x => {
-          if(x == null) {
-            router.navigate(["404"]);
-          }
-          this.currencySymbol = x?.symbol;
-        }
-        )
-    });
-
+  constructor(private store: Store<CurrencyHistoryState>, private route: ActivatedRoute, private router: Router) {
+    this.history$ = this.store.pipe(select(selectCurrencyHistoryById('')));
   }
 
   ngOnInit(): void {
     this.route.params.subscribe((params: Params) => {
-      this.currencyId = params['id']
-      this.store.pipe(select(selectCurrencyById(this.currencyId)))
-    });
-  }
+      this.currencyId = params['id'];
+      this.history$ = this.store.pipe(select(selectCurrencyHistoryById(this.currencyId)))});
+      this.history$.subscribe(x => {
+        this.history = x
+        if(x == undefined){
+          this.router.navigate(["404"]);
+        }
+      });
+    }
 }
+
