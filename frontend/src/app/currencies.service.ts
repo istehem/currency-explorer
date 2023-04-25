@@ -1,8 +1,10 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http"
 import { Currency } from "./currency/model/currency";
-import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { map, take } from 'rxjs/operators';
+import { Observable, of, zip } from 'rxjs';
+import { CurrencyUtil } from "./currency/currency-util";
+import { currencies } from "./currencies.reducer";
 
 @Injectable({
     providedIn: 'any'
@@ -11,7 +13,7 @@ export class CurrenciesService {
     constructor(private http: HttpClient) { }
 
     getAll(): Observable<Currency[]> {
-        return this.http.get('https://api.coinlore.net/api/tickers/').pipe(map((res: any) =>
+        let currencies$: Observable<Currency[]> = this.http.get('https://api.coinlore.net/api/tickers/').pipe(map((res: any) =>
             res.data.map((item: any) => {
                 return ({
                     id: item.id,
@@ -24,6 +26,29 @@ export class CurrenciesService {
                     selected: false
                 });
             })));
+        let favorites$: Observable<any[]> = this.http.get('http://localhost:5000/favorites').pipe(map((res: any) =>
+            res.map((item: any) => {
+                console.log(item);
+                return ({
+                    id: item.id,
+                    status: item.status
+                });
+            })));
+
+        return zip(currencies$, favorites$).pipe(map(([currencies, favorites]) =>
+            this.setIsFavorite(currencies, favorites)));
+
+    }
+
+    setIsFavorite(currencies: Currency[], favorites: any[]): Currency[] {
+        const map = new Map<string, boolean>
+        for (var favorite of favorites) {
+            map.set(favorite.id, favorite.status);
+        }
+        currencies.forEach(currency => {
+            currency.selected = map.get(currency.symbol) || false;
+        })
+        return currencies;
     }
 
     get(currency: Currency): Observable<Currency> {
