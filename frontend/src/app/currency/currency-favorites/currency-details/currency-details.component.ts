@@ -48,6 +48,10 @@ export class CurrencyDetailsComponent implements OnInit {
         value: [prices[i].timestamp, prices[i].price]
       });
     }
+    data.push({
+      name: history.price.timestamp,
+      value: [history.price.timestamp, history.price.price]
+    });
     this.options = {
       tooltip: {
         trigger: 'axis',
