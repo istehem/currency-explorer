@@ -55,12 +55,36 @@ class Currency():
         self.price_history.append(self.price)
         self.price = Price(price, datetime.now())
 
-class Status(Resource):
+class StatusResource(Resource):
     def get(self):
         return {'up': 'true'}
 
+class FavoritesResource(Resource):
+    def get(self):
+        self.favorites = db.table('favorites')
+        return self.favorites.all()
 
-class SingleCurrency(Resource):
+class FavoriteResource(Resource):
+    def __init__(self):
+        self.favorites = db.table('favorites')
+        self.favorites_query = Query()
+
+    def get(self, favorite_id):
+        result = self.favorites.search(self.favorites_query.id == favorite_id)
+        if not result:
+            raise NotFound("Favorite Entry Not Found")
+        return result[0]
+
+    def put(self, favorite_id):
+        data = request.get_json()
+        available = 'status' in data
+        if not available or not type(data['status']) is bool:
+            raise BadRequest(f"field 'status' is required and must be a boolean in the request body: {data}")
+        status = data['status']
+        self.favorites.upsert({'id': favorite_id, 'status': status}, self.favorites_query.id == favorite_id)
+        return ('', 204)
+
+class CurrencyResource(Resource):
     def __init__(self):
         self.currency_history = db.table('currency_history')
         self.currency_query = Query()
@@ -98,8 +122,10 @@ class SingleCurrency(Resource):
         self.currency_history.update(marshal_currency(currency), self.currency_query.id == currency_id)
         return currency
 
-api.add_resource(Status, '/status')
-api.add_resource(SingleCurrency, '/currencies/<string:currency_id>')
+api.add_resource(StatusResource, '/status')
+api.add_resource(CurrencyResource, '/currencies/<string:currency_id>')
+api.add_resource(FavoritesResource, '/favorites/')
+api.add_resource(FavoriteResource, '/favorites/<string:favorite_id>')
 
 if __name__ == '__main__':
     app.run(debug=True)
