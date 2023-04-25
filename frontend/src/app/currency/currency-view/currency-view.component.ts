@@ -44,8 +44,8 @@ export class CurrencyViewComponent implements OnInit {
       id: selectedCurrency.id,
       changes: { selected: event.target.checked }
     }
+    this.store.dispatch(edited({ currency }));
     if (event.target.checked) {
-      this.store.dispatch(edited({ currency }));
       this.historyStore.dispatch(add({ currency: selectedCurrency  }));
     }
   }
