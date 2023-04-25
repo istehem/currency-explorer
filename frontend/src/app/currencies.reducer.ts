@@ -1,5 +1,5 @@
 import { Action, createReducer, on } from "@ngrx/store";
-import { add, del, edited, loadSuccess, reloadSuccess, upsert } from "./currencies.actions";
+import { add, edited, loadSuccess, reloadSuccess, upsert } from "./currencies.actions";
 import { Currency } from "./currency/model/currency";
 import { EntityAdapter, createEntityAdapter, Update } from '@ngrx/entity';
 import { CurrencyState } from "./currency/model/currency.state";
@@ -52,7 +52,6 @@ function reloadCurrencies(currencies: Currency[], state: CurrencyState){
 
 export const currencies = createReducer(initialState,
   on(add, (state, { currency }) => addCurrency(currency, state)),
-  on(del, (state) => state),
   on(edited, (state, { currency }) => editCurrency(currency, state)),
   on(loadSuccess, (state, { currencies }) => loadCurrencies(currencies, state)),
   on(upsert, (state, { currency }) => upsertCurrency(currency, state)),

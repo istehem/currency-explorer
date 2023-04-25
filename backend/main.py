@@ -12,11 +12,12 @@ app = Flask(__name__)
 CORS(app)
 api = Api(app)
 
-def get_db_path():
+def get_db_path(filename):
     current = os.path.dirname(os.path.realpath(__file__))
-    return os.path.join(current, 'db', 'db.json')
+    return os.path.join(current, 'db', filename)
 
-db = TinyDB(get_db_path())
+history_db = TinyDB(get_db_path('history.json'))
+favorites_db = TinyDB(get_db_path('favorites.json'))
 
 class Date(fields.Raw):
     def format(self, value):
@@ -61,12 +62,12 @@ class StatusResource(Resource):
 
 class FavoritesResource(Resource):
     def get(self):
-        self.favorites = db.table('favorites')
+        self.favorites = favorites_db.table('favorites')
         return self.favorites.all()
 
 class FavoriteResource(Resource):
     def __init__(self):
-        self.favorites = db.table('favorites')
+        self.favorites = favorites_db.table('favorites')
         self.favorites_query = Query()
 
     def get(self, favorite_id):
@@ -77,16 +78,18 @@ class FavoriteResource(Resource):
 
     def put(self, favorite_id):
         data = request.get_json()
+        status = False
         available = 'status' in data
-        if not available or not type(data['status']) is bool:
+        if available:
+            status = data['status']
+        if not available or not type(status) is bool:
             raise BadRequest(f"field 'status' is required and must be a boolean in the request body: {data}")
-        status = data['status']
         self.favorites.upsert({'id': favorite_id, 'status': status}, self.favorites_query.id == favorite_id)
         return ('', 204)
 
 class CurrencyResource(Resource):
     def __init__(self):
-        self.currency_history = db.table('currency_history')
+        self.currency_history = history_db.table('currency_history')
         self.currency_query = Query()
 
     def __to_currency(self, db_result):

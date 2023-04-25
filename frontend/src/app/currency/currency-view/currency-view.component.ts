@@ -42,7 +42,7 @@ export class CurrencyViewComponent implements OnInit {
   onCurrencySelect(event: any, selectedCurrency: Currency) {
     let currency: Update<Currency> = {
       id: selectedCurrency.id,
-      changes: { selected: event.target.checked }
+      changes: { selected: event.target.checked, symbol: selectedCurrency.symbol }
     }
     this.store.dispatch(edited({ currency }));
     if (event.target.checked) {

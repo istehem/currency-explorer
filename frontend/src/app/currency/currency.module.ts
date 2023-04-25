@@ -2,7 +2,6 @@ import { StoreModule } from "@ngrx/store";
 import { CurrencyViewComponent } from "./currency-view/currency-view.component";
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import { CurrencyAddComponent } from './currency-add/currency-add.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { EffectsModule } from '@ngrx/effects';
 import { CurrencyEffects } from "../currencies.effects";
@@ -16,7 +15,7 @@ import { historyReducer } from "../currency.history.reducer";
 import { NgxEchartsModule } from 'ngx-echarts';
 
 @NgModule({
-    declarations: [CurrencyViewComponent, CurrencyAddComponent, CurrencyFavoritesComponent, CurrencyDetailsComponent],
+    declarations: [CurrencyViewComponent, CurrencyFavoritesComponent, CurrencyDetailsComponent],
     imports: [
         CommonModule,
         StoreModule.forFeature(currencyStateFeatureKey, currencyReducer),
@@ -27,8 +26,7 @@ import { NgxEchartsModule } from 'ngx-echarts';
         ReactiveFormsModule
     ],
     exports: [
-        CurrencyViewComponent,
-        CurrencyAddComponent
+        CurrencyViewComponent
     ]
 
 })

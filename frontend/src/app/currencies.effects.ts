@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { EMPTY } from 'rxjs';
-import { map, mergeMap, catchError } from 'rxjs/operators';
+import { map, mergeMap, catchError, switchMap } from 'rxjs/operators';
 import { CurrenciesService } from './currencies.service';
-import { load, loadSuccess, refreshCurrency, reload, reloadSuccess, upsert } from './currencies.actions';
+import { edited, editedSuccess, load, loadSuccess, refreshCurrency, reload, reloadSuccess, upsert } from './currencies.actions';
 
 
 @Injectable()
@@ -11,7 +11,7 @@ export class CurrencyEffects {
     loadCurrencies$ = createEffect(() =>
         this.actions$.pipe(
             ofType(load),
-            mergeMap(() => this.currenciesService.getAll()
+            switchMap(() => this.currenciesService.getAll()
                 .pipe(
                     map(currencies => loadSuccess({ currencies: currencies })),
                     catchError(() => EMPTY)
@@ -22,7 +22,7 @@ export class CurrencyEffects {
     reloadCurrencies$ = createEffect(() =>
         this.actions$.pipe(
             ofType(reload),
-            mergeMap(() => this.currenciesService.getAll()
+            switchMap(() => this.currenciesService.getAll()
                 .pipe(
                     map(currencies => reloadSuccess({ currencies: currencies })),
                     catchError(() => EMPTY)
@@ -33,11 +33,24 @@ export class CurrencyEffects {
     loadCurrency$ = createEffect(() =>
         this.actions$.pipe(
             ofType(refreshCurrency),
-            mergeMap(({ currency }) => this.currenciesService.get(currency)
+            switchMap(({ currency }) => this.currenciesService.get(currency)
                 .pipe(
                     map(currency => upsert({ currency: currency })),
                     catchError(() => EMPTY)
                 ))
+        )
+    );
+
+    editCurrency$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(edited),
+            mergeMap(({ currency }) => {
+                return this.currenciesService.setFavorite(currency.changes.symbol, currency.changes.selected)
+                    .pipe(
+                        map(() => editedSuccess()),
+                        catchError(() => EMPTY)
+                    )
+            })
         )
     );
 

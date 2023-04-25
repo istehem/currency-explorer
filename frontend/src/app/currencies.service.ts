@@ -1,9 +1,8 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http"
+import { HttpClient, HttpHeaders } from "@angular/common/http"
 import { Currency } from "./currency/model/currency";
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { HttpParams } from "@angular/common/http";
 
 @Injectable({
     providedIn: 'any'
@@ -37,7 +36,16 @@ export class CurrenciesService {
             cap: res[0].market_cap_usd,
             percentChange7d: res[0].percent_change_7d,
             percentChange24h: res[0].percent_change_24h,
-            selected : currency.selected
+            selected: currency.selected
         })));
+    }
+
+    setFavorite(symbol: string | undefined, select: boolean | undefined): Observable<any> {
+        let headers = new HttpHeaders();
+        headers.append("Content-Type", "application/json");
+        return this.http.put('http://127.0.0.1:5000/favorites/' + symbol,
+            { status: select },
+            { headers: headers }
+        )
     }
 }
