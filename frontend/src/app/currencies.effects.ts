@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { EMPTY } from 'rxjs';
-import { map, mergeMap, catchError, switchMap } from 'rxjs/operators';
+import { map, mergeMap, catchError, switchMap, exhaustMap } from 'rxjs/operators';
 import { CurrenciesService } from './currencies.service';
 import { edited, editedSuccess, load, loadSuccess, refreshCurrency, reload, reloadSuccess, upsert } from './currencies.actions';
+import { addAfterLoad } from './currency.history.actions';
+import { of } from 'rxjs';
+
 
 
 @Injectable()
@@ -11,11 +14,19 @@ export class CurrencyEffects {
     loadCurrencies$ = createEffect(() =>
         this.actions$.pipe(
             ofType(load),
-            switchMap(() => this.currenciesService.getAll()
+            exhaustMap(() => this.currenciesService.getAll()
                 .pipe(
                     map(currencies => loadSuccess({ currencies: currencies })),
                     catchError(() => EMPTY)
                 ))
+        )
+    );
+
+    addToHistory$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(loadSuccess),
+            switchMap(({ currencies: currencies }) => of(currencies)
+                .pipe(map(currencies => addAfterLoad({ currencies }))))
         )
     );
 

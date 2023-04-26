@@ -1,10 +1,8 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http"
 import { Currency } from "./currency/model/currency";
-import { map, take } from 'rxjs/operators';
-import { Observable, of, zip } from 'rxjs';
-import { CurrencyUtil } from "./currency/currency-util";
-import { currencies } from "./currencies.reducer";
+import { map } from "rxjs/operators";
+import { Observable, zip } from 'rxjs';
 
 @Injectable({
     providedIn: 'any'
@@ -28,7 +26,6 @@ export class CurrenciesService {
             })));
         let favorites$: Observable<any[]> = this.http.get('http://localhost:5000/favorites').pipe(map((res: any) =>
             res.map((item: any) => {
-                console.log(item);
                 return ({
                     id: item.id,
                     status: item.status

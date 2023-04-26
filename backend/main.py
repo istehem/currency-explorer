@@ -131,4 +131,6 @@ api.add_resource(FavoritesResource, '/favorites/')
 api.add_resource(FavoriteResource, '/favorites/<string:favorite_id>')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # TinyDB is probably not the best choice since it isn't threadsafe.
+    # Hence, as long as TinyDB is used, threaded=False is set so the db don't get messed up.
+    app.run(debug=True, threaded=False)
