@@ -1,12 +1,12 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
-import { Observable, concatMap, map, of, tap } from 'rxjs';
-import { CurrencyHistoryState } from '../model/currency.history.state';
-import { CurrencyHistory, Price } from '../model/currency.history';
-import { selectAllHistory, selectCurrencyHistoryById } from 'src/app/currency.history.selectors';
-import { DatePipe } from '@angular/common';
+import { Observable, of } from 'rxjs';
 import { loadIfNotInStore } from 'src/app/currency.history.actions';
+import { selectAllHistory, selectCurrencyHistoryById } from 'src/app/currency.history.selectors';
+import { CurrencyHistory, Price } from '../model/currency.history';
+import { CurrencyHistoryState } from '../model/currency.history.state';
 
 @Component({
   selector: 'app-currency-details',
@@ -30,18 +30,14 @@ export class CurrencyDetailsComponent implements OnInit {
       this.currencyId = params['id'];
       this.store.dispatch(loadIfNotInStore({ id: this.currencyId }));
       this.allHistory$.subscribe(() => {
-        this.history$ = this.store.pipe(select(selectCurrencyHistoryById(this.currencyId)));
+        this.history$ = this.store.pipe(select(selectCurrencyHistoryById(this.currencyId)))
+        this.history$.subscribe(x => {
+          this.history = x;
+          if (x) {
+            this.createPriceHistoryGraph(x);
+          }
+        });
       });
-    });
-
-    this.history$.subscribe(x => {
-      this.history = x;
-      if (x == undefined) {
-        this.router.navigate(["404"]);
-      }
-      else {
-        this.createPriceHistoryGraph(x);
-      }
     });
   }
 

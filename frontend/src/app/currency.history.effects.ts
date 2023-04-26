@@ -1,15 +1,14 @@
 import { Injectable } from "@angular/core";
+import { Router } from "@angular/router";
 import { Actions, concatLatestFrom, createEffect, ofType } from "@ngrx/effects";
-import { add, addAfterLoad, addAfterLoadSuccess, addSuccess, dummy, loadIfNotInStore, newPrice } from "./currency.history.actions";
-import { map, mergeMap, catchError, switchMap, withLatestFrom, concatMap } from 'rxjs/operators';
-import { CurrencyHistoryService } from "./currency.history.service";
-import { EMPTY } from 'rxjs';
-import { upsert } from "./currencies.actions";
 import { Store, select } from "@ngrx/store";
-import { CurrencyHistory } from "./currency/model/currency.history";
+import { EMPTY, of } from 'rxjs';
+import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
+import { upsert } from "./currencies.actions";
+import { add, addAfterLoad, addAfterLoadSuccess, addSuccess, loadIfNotInStore, newPrice } from "./currency.history.actions";
 import { selectCurrencyHistoryById } from "./currency.history.selectors";
-import { currencies } from "./currencies.reducer";
-import { of } from 'rxjs';
+import { CurrencyHistoryService } from "./currency.history.service";
+import { CurrencyHistory } from "./currency/model/currency.history";
 
 
 @Injectable()
@@ -78,20 +77,23 @@ export class CurrencyHistoryEffects {
                 return this.store.pipe(select(selectCurrencyHistoryById(id)))
             }),
             switchMap(([{ id }, currencyHistory]) => {
-                if(!currencyHistory){
-                    return this.currencyHistoryService.get(id).pipe(map((currencyHistory) => addSuccess({ currencyHistory })))
+                if (!currencyHistory) {
+                    return this.currencyHistoryService.get(id).pipe(map((currencyHistory) =>
+                        addSuccess({ currencyHistory })),
+                        catchError(() => {
+                            this.router.navigate(["404"]); return EMPTY
+                        }))
                 }
-                return of(currencyHistory).pipe(map((currencyHistory) => addSuccess({currencyHistory})));
+                return of(currencyHistory).pipe(map((currencyHistory) => addSuccess({ currencyHistory })));
             })
         )
     );
-    //this.currencyHistoryService.get(id).pipe(currencyHistory => addSuccess({currencyHistory}
-
 
     constructor(
         private actions$: Actions,
         private currencyHistoryService: CurrencyHistoryService,
-        private store: Store<CurrencyHistory>
+        private store: Store<CurrencyHistory>,
+        private router: Router
     ) { }
 
 }
