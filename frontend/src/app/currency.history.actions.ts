@@ -7,3 +7,5 @@ export const addAfterLoad = createAction('[Currency History Component] Add After
 export const addAfterLoadSuccess = createAction('[Currency History Component] Add After Load Success', props<{currencyHistoryEntries : CurrencyHistory[] }>());
 export const addSuccess = createAction('[Currency History Component] Add Success', props<{currencyHistory : CurrencyHistory }>());
 export const newPrice = createAction('[Currency History Component] New Price', props<{currencyHistory : CurrencyHistory }>());
+export const loadIfNotInStore = createAction('[Currency History Component] Load If Not In Store', props<{id : string }>());
+export const dummy = createAction('[Currency History Component] Dummy');

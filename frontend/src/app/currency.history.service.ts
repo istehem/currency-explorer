@@ -29,6 +29,15 @@ export class CurrencyHistoryService {
         const results: Observable<CurrencyHistory>[] = currencies.filter(c => c.selected).map(c => this.add(c));
         return zip(results).pipe(map(xs => xs))
     }
+
+    get(id: string): Observable<CurrencyHistory> {
+        return this.http.get('http://127.0.0.1:5000/currencies/' + id).pipe(map((res: any) =>
+        ({
+            id: res.id,
+            price: res.price,
+            price_history: res.price_history
+        })));
+    }
 }
 
 

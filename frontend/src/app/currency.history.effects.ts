@@ -1,10 +1,16 @@
 import { Injectable } from "@angular/core";
-import { Actions, createEffect, ofType } from "@ngrx/effects";
-import { add, addAfterLoad, addAfterLoadSuccess, addSuccess, newPrice } from "./currency.history.actions";
-import { map, mergeMap, catchError } from 'rxjs/operators';
+import { Actions, concatLatestFrom, createEffect, ofType } from "@ngrx/effects";
+import { add, addAfterLoad, addAfterLoadSuccess, addSuccess, dummy, loadIfNotInStore, newPrice } from "./currency.history.actions";
+import { map, mergeMap, catchError, switchMap, withLatestFrom, concatMap } from 'rxjs/operators';
 import { CurrencyHistoryService } from "./currency.history.service";
 import { EMPTY } from 'rxjs';
 import { upsert } from "./currencies.actions";
+import { Store, select } from "@ngrx/store";
+import { CurrencyHistory } from "./currency/model/currency.history";
+import { selectCurrencyHistoryById } from "./currency.history.selectors";
+import { currencies } from "./currencies.reducer";
+import { of } from 'rxjs';
+
 
 @Injectable()
 export class CurrencyHistoryEffects {
@@ -65,10 +71,27 @@ export class CurrencyHistoryEffects {
         )
     );
 
+    loadIfNotInStore$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(loadIfNotInStore),
+            concatLatestFrom(({ id }) => {
+                return this.store.pipe(select(selectCurrencyHistoryById(id)))
+            }),
+            switchMap(([{ id }, currencyHistory]) => {
+                if(!currencyHistory){
+                    return this.currencyHistoryService.get(id).pipe(map((currencyHistory) => addSuccess({ currencyHistory })))
+                }
+                return of(currencyHistory).pipe(map((currencyHistory) => addSuccess({currencyHistory})));
+            })
+        )
+    );
+    //this.currencyHistoryService.get(id).pipe(currencyHistory => addSuccess({currencyHistory}
+
 
     constructor(
         private actions$: Actions,
-        private currencyHistoryService: CurrencyHistoryService
+        private currencyHistoryService: CurrencyHistoryService,
+        private store: Store<CurrencyHistory>
     ) { }
 
 }

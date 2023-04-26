@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { CurrencyHistoryState } from '../../model/currency.history.state';
-import { CurrencyHistory, Price } from '../../model/currency.history';
-import { selectCurrencyHistoryById } from 'src/app/currency.history.selectors';
+import { Observable, concatMap, map, of, tap } from 'rxjs';
+import { CurrencyHistoryState } from '../model/currency.history.state';
+import { CurrencyHistory, Price } from '../model/currency.history';
+import { selectAllHistory, selectCurrencyHistoryById } from 'src/app/currency.history.selectors';
 import { DatePipe } from '@angular/common';
+import { loadIfNotInStore } from 'src/app/currency.history.actions';
 
 @Component({
   selector: 'app-currency-details',
@@ -15,20 +16,26 @@ import { DatePipe } from '@angular/common';
 export class CurrencyDetailsComponent implements OnInit {
   currencyId: string = '';
   history$: Observable<CurrencyHistory | undefined>;
+  allHistory$: Observable<CurrencyHistory[]>;
   history: CurrencyHistory | undefined;
   options: any;
 
   constructor(private store: Store<CurrencyHistoryState>, private route: ActivatedRoute, private router: Router) {
-    this.history$ = this.store.pipe(select(selectCurrencyHistoryById('')));
+    this.allHistory$ = this.store.pipe(select(selectAllHistory));
+    this.history$ = of(undefined);
   }
 
   ngOnInit(): void {
     this.route.params.subscribe((params: Params) => {
       this.currencyId = params['id'];
-      this.history$ = this.store.pipe(select(selectCurrencyHistoryById(this.currencyId)))
+      this.store.dispatch(loadIfNotInStore({ id: this.currencyId }));
+      this.allHistory$.subscribe(() => {
+        this.history$ = this.store.pipe(select(selectCurrencyHistoryById(this.currencyId)));
+      });
     });
+
     this.history$.subscribe(x => {
-      this.history = x
+      this.history = x;
       if (x == undefined) {
         this.router.navigate(["404"]);
       }

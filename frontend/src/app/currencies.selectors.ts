@@ -27,7 +27,3 @@ export const selectCurrencyById = (id: number) => createSelector(
 export const isLoaded = createSelector(
     selectCurrencyState, (state: CurrencyState) => state.loaded
 );
-
-
-
-

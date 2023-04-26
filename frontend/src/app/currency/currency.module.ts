@@ -7,7 +7,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { CurrencyEffects } from "../currencies.effects";
 import { CurrencyFavoritesComponent } from './currency-favorites/currency-favorites.component';
 import { currencyStateFeatureKey } from "./model/currency.state";
-import { CurrencyDetailsComponent } from './currency-favorites/currency-details/currency-details.component';
+import { CurrencyDetailsComponent } from './currency-details/currency-details.component';
 import { currencyHistoryStateFeatureKey } from "./model/currency.history.state";
 import { CurrencyHistoryEffects } from "../currency.history.effects";
 import { currencyReducer } from "../currencies.reducer";
