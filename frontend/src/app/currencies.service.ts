@@ -24,7 +24,7 @@ export class CurrenciesService {
                     selected: false
                 });
             })));
-        let favorites$: Observable<any[]> = this.http.get('http://localhost:5000/favorites').pipe(map((res: any) =>
+        let favorites$: Observable<any[]> = this.http.get('http://localhost:5000/favorites/').pipe(map((res: any) =>
             res.map((item: any) => {
                 return ({
                     id: item.id,

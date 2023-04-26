@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Currency } from "./currency/model/currency";
-import { Observable, map, of, zip } from "rxjs";
+import { Observable, map, zip } from "rxjs";
 import { CurrencyHistory } from "./currency/model/currency.history";
 import { HttpHeaders } from "@angular/common/http";
 

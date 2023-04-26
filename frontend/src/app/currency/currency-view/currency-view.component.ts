@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { edited, load, loadSuccess, reload } from 'src/app/currencies.actions';
+import { edited, load, reload } from 'src/app/currencies.actions';
 import { isLoaded, selectCurrencies } from 'src/app/currencies.selectors';
 import { Currency } from 'src/app/currency/model/currency';
 import { CurrencyUtil } from '../currency-util';
