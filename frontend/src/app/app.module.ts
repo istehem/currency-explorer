@@ -16,10 +16,11 @@ import { NgxEchartsModule } from 'ngx-echarts';
 import { RouterModule } from '@angular/router';
 import { appRoutes } from "./routes";
 import { NotFoundComponentComponent } from './not-found-component/not-found-component.component';
+import { ServerErrorComponentComponent } from './server-error-component/server-error-component.component';
 
 
 @NgModule({
-    declarations: [AppComponent, NotFoundComponentComponent],
+    declarations: [AppComponent, NotFoundComponentComponent, ServerErrorComponentComponent],
     providers: [],
     bootstrap: [AppComponent],
     imports: [BrowserModule, 

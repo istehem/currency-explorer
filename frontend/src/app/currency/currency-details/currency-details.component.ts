@@ -4,7 +4,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ofType } from '@ngrx/effects';
 import { ScannedActionsSubject, Store, select } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
-import { currencyNotFound, loadIfNotInStore } from 'src/app/currency.history.actions';
+import { httpError, loadIfNotInStore } from 'src/app/currency.history.actions';
 import { selectAllHistory, selectCurrencyHistoryById } from 'src/app/currency.history.selectors';
 import { CurrencyHistory, Price } from '../model/currency.history';
 import { CurrencyHistoryState } from '../model/currency.history.state';
@@ -100,8 +100,16 @@ export class CurrencyDetailsComponent implements OnInit {
     };
   }
 
-  private errorHandler() : void {
-    this.actions$.pipe(ofType(currencyNotFound)).subscribe(() => this.router.navigate(["404"]));
+  private errorHandler(): void {
+    this.actions$.pipe(ofType(httpError)).subscribe((error) => {
+      if (error.status === 404) {
+        this.router.navigate(["404"]);
+      }
+      else {
+        this.router.navigate(["500"]);
+        console.log(error);
+      }
+    });
   }
 
 }

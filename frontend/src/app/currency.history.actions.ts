@@ -8,4 +8,4 @@ export const addAfterLoadSuccess = createAction('[Currency History Component] Ad
 export const addSuccess = createAction('[Currency History Component] Add Success', props<{currencyHistory : CurrencyHistory }>());
 export const newPrice = createAction('[Currency History Component] New Price', props<{currencyHistory : CurrencyHistory }>());
 export const loadIfNotInStore = createAction('[Currency History Component] Load If Not In Store', props<{id : string }>());
-export const currencyNotFound = createAction('[Currency History Component] Not Found');
+export const httpError = createAction('[Currency History Component] Not Found', props<{error : any, status: number }>());

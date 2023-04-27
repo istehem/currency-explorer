@@ -1,11 +1,10 @@
 import { Injectable } from "@angular/core";
-import { Router } from "@angular/router";
 import { Actions, concatLatestFrom, createEffect, ofType } from "@ngrx/effects";
 import { Store, select } from "@ngrx/store";
 import { EMPTY, of } from 'rxjs';
 import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
 import { upsert } from "./currencies.actions";
-import { add, addAfterLoad, addAfterLoadSuccess, addSuccess, currencyNotFound, loadIfNotInStore, newPrice } from "./currency.history.actions";
+import { add, addAfterLoad, addAfterLoadSuccess, addSuccess, httpError, loadIfNotInStore, newPrice } from "./currency.history.actions";
 import { selectCurrencyHistoryById } from "./currency.history.selectors";
 import { CurrencyHistoryService } from "./currency.history.service";
 import { CurrencyHistory } from "./currency/model/currency.history";
@@ -81,8 +80,8 @@ export class CurrencyHistoryEffects {
                 if (!currencyHistory) {
                     return this.currencyHistoryService.get(id).pipe(map((currencyHistory) =>
                         addSuccess({ currencyHistory })),
-                        catchError(() => {
-                            return of(currencyNotFound())
+                        catchError((error) => {
+                            return of(httpError(error))
                         }))
                 }
                 return of(currencyHistory).pipe(map((currencyHistory) => addSuccess({ currencyHistory })));
@@ -93,8 +92,7 @@ export class CurrencyHistoryEffects {
     constructor(
         private actions$: Actions,
         private currencyHistoryService: CurrencyHistoryService,
-        private store: Store<CurrencyHistory>,
-        private router: Router
+        private store: Store<CurrencyHistory>
     ) { }
 
 }
