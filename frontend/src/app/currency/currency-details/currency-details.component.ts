@@ -1,9 +1,10 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Store, select } from '@ngrx/store';
+import { ofType } from '@ngrx/effects';
+import { ScannedActionsSubject, Store, select } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
-import { loadIfNotInStore } from 'src/app/currency.history.actions';
+import { currencyNotFound, loadIfNotInStore } from 'src/app/currency.history.actions';
 import { selectAllHistory, selectCurrencyHistoryById } from 'src/app/currency.history.selectors';
 import { CurrencyHistory, Price } from '../model/currency.history';
 import { CurrencyHistoryState } from '../model/currency.history.state';
@@ -20,9 +21,10 @@ export class CurrencyDetailsComponent implements OnInit {
   history: CurrencyHistory | undefined;
   options: any;
 
-  constructor(private store: Store<CurrencyHistoryState>, private route: ActivatedRoute, private router: Router) {
+  constructor(private store: Store<CurrencyHistoryState>, private route: ActivatedRoute, private router: Router, private actions$: ScannedActionsSubject) {
     this.allHistory$ = this.store.pipe(select(selectAllHistory));
     this.history$ = of(undefined);
+    this.errorHandler();
   }
 
   ngOnInit(): void {
@@ -97,4 +99,9 @@ export class CurrencyDetailsComponent implements OnInit {
       animationDelayUpdate: (idx: number) => idx * 5,
     };
   }
+
+  private errorHandler() : void {
+    this.actions$.pipe(ofType(currencyNotFound)).subscribe(() => this.router.navigate(["404"]));
+  }
+
 }

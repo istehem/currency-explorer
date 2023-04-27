@@ -5,10 +5,11 @@ import { Store, select } from "@ngrx/store";
 import { EMPTY, of } from 'rxjs';
 import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
 import { upsert } from "./currencies.actions";
-import { add, addAfterLoad, addAfterLoadSuccess, addSuccess, loadIfNotInStore, newPrice } from "./currency.history.actions";
+import { add, addAfterLoad, addAfterLoadSuccess, addSuccess, currencyNotFound, loadIfNotInStore, newPrice } from "./currency.history.actions";
 import { selectCurrencyHistoryById } from "./currency.history.selectors";
 import { CurrencyHistoryService } from "./currency.history.service";
 import { CurrencyHistory } from "./currency/model/currency.history";
+
 
 
 @Injectable()
@@ -81,7 +82,7 @@ export class CurrencyHistoryEffects {
                     return this.currencyHistoryService.get(id).pipe(map((currencyHistory) =>
                         addSuccess({ currencyHistory })),
                         catchError(() => {
-                            this.router.navigate(["404"]); return EMPTY
+                            return of(currencyNotFound())
                         }))
                 }
                 return of(currencyHistory).pipe(map((currencyHistory) => addSuccess({ currencyHistory })));
