@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { EMPTY } from 'rxjs';
-import { map, mergeMap, catchError, switchMap, exhaustMap } from 'rxjs/operators';
+import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
+import { Store, select } from '@ngrx/store';
+import { EMPTY, of } from 'rxjs';
+import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
+import { edited, editedSuccess, load, loadSuccess, refreshCurrency, refreshCurrencyBySymbol, reload, reloadSuccess, upsert } from './currencies.actions';
+import { isLoaded, selectCurrencyBySymbol } from './currencies.selectors';
 import { CurrenciesService } from './currencies.service';
-import { edited, editedSuccess, load, loadSuccess, refreshCurrency, reload, reloadSuccess, upsert } from './currencies.actions';
 import { addAfterLoad } from './currency.history.actions';
-import { of } from 'rxjs';
+import { Currency } from './currency/model/currency';
 
 
 
@@ -14,11 +16,17 @@ export class CurrencyEffects {
     loadCurrencies$ = createEffect(() =>
         this.actions$.pipe(
             ofType(load),
-            exhaustMap(() => this.currenciesService.getAll()
-                .pipe(
-                    map(currencies => loadSuccess({ currencies: currencies })),
-                    catchError(() => EMPTY)
-                ))
+            concatLatestFrom(() => this.store.pipe(select(isLoaded))),
+            switchMap(([_arg, isLoaded]) => {
+                if (!isLoaded) {
+                    return this.currenciesService.getAll()
+                        .pipe(
+                            map(currencies => loadSuccess({ currencies: currencies })),
+                            catchError(() => EMPTY)
+                        )
+                }
+                return EMPTY;
+            })
         )
     );
 
@@ -65,8 +73,23 @@ export class CurrencyEffects {
         )
     );
 
+    loadCurrencyBySymbol$ = createEffect(() =>
+        this.actions$.pipe(
+            ofType(refreshCurrencyBySymbol),
+            concatLatestFrom(({ currencySymbol }) => this.store.pipe(select(selectCurrencyBySymbol(currencySymbol)))),
+            switchMap(([_payload, currency]) => {
+                if (currency) {
+                    return this.currenciesService.get(currency).pipe(map(c => upsert({ currency: c })))
+                }
+                this.store.dispatch(load());
+                return EMPTY;
+            })
+        )
+    );
+
     constructor(
         private actions$: Actions,
-        private currenciesService: CurrenciesService
+        private currenciesService: CurrenciesService,
+        private store: Store<Currency>
     ) { }
 }

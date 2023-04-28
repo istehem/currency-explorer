@@ -24,6 +24,11 @@ export const selectCurrencyById = (id: number) => createSelector(
     currencyAdapter.getSelectors().selectEntities(state)[id]
 );
 
+export const selectCurrencyBySymbol = (symbol: string) => createSelector(
+    selectCurrencyState, (state: CurrencyState) =>
+    currencyAdapter.getSelectors().selectAll(state).find(c => c.symbol === symbol)
+);
+
 export const isLoaded = createSelector(
     selectCurrencyState, (state: CurrencyState) => state.loaded
 );

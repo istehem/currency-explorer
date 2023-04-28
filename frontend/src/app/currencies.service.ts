@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http"
 import { Currency } from "./currency/model/currency";
-import { map } from "rxjs/operators";
-import { Observable, zip } from 'rxjs';
+import { filter, map } from "rxjs/operators";
+import { Observable, of, zip } from 'rxjs';
 
 @Injectable({
     providedIn: 'any'

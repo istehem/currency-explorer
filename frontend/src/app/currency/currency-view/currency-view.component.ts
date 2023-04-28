@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
+import { Update } from '@ngrx/entity';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { edited, load, reload } from 'src/app/currencies.actions';
-import { isLoaded, selectCurrencies } from 'src/app/currencies.selectors';
+import { selectCurrencies } from 'src/app/currencies.selectors';
+import { add } from 'src/app/currency.history.actions';
 import { Currency } from 'src/app/currency/model/currency';
 import { CurrencyUtil } from '../currency-util';
-import { CurrencyState } from '../model/currency.state';
-import { Update } from '@ngrx/entity';
-import { add } from 'src/app/currency.history.actions';
 import { CurrencyHistoryState } from '../model/currency.history.state';
+import { CurrencyState } from '../model/currency.state';
 
 @Component({
   selector: 'app-currency-view',
@@ -24,11 +24,7 @@ export class CurrencyViewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store.pipe(select(isLoaded)).subscribe(loaded => {
-      if (!loaded) {
-        this.store.dispatch(load());
-      }
-    });
+    this.store.dispatch(load());
   }
 
   reload(): void {

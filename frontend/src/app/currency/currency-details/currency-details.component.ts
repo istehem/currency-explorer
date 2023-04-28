@@ -4,10 +4,12 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ofType } from '@ngrx/effects';
 import { ScannedActionsSubject, Store, select } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
+import { refreshCurrencyBySymbol } from 'src/app/currencies.actions';
 import { httpError, loadIfNotInStore } from 'src/app/currency.history.actions';
 import { selectAllHistory, selectCurrencyHistoryById } from 'src/app/currency.history.selectors';
 import { CurrencyHistory, Price } from '../model/currency.history';
 import { CurrencyHistoryState } from '../model/currency.history.state';
+import { CurrencyState } from '../model/currency.state';
 
 @Component({
   selector: 'app-currency-details',
@@ -21,7 +23,8 @@ export class CurrencyDetailsComponent implements OnInit {
   history: CurrencyHistory | undefined;
   options: any;
 
-  constructor(private store: Store<CurrencyHistoryState>, private route: ActivatedRoute, private router: Router, private actions$: ScannedActionsSubject) {
+  constructor(private store: Store<CurrencyHistoryState>, private currencyStore: Store<CurrencyState>, private route: ActivatedRoute,
+    private router: Router, private actions$: ScannedActionsSubject) {
     this.allHistory$ = this.store.pipe(select(selectAllHistory));
     this.history$ = of(undefined);
     this.errorHandler();
@@ -112,4 +115,7 @@ export class CurrencyDetailsComponent implements OnInit {
     });
   }
 
+  refresh() {
+    this.currencyStore.dispatch(refreshCurrencyBySymbol({ currencySymbol: this.currencyId }))
+  }
 }

@@ -56,20 +56,6 @@ export class CurrencyHistoryEffects {
         )
     );
 
-    afterLoad$ = createEffect(() =>
-        this.actions$.pipe(
-            ofType(upsert),
-            mergeMap(({ currency }) => this.currencyHistoryService.add(currency)
-                .pipe(
-                    map(currencyHistory => {
-                        let result = newPrice({ currencyHistory: currencyHistory });
-                        return result;
-                    }),
-                    catchError(() => EMPTY)
-                ))
-        )
-    );
-
     loadIfNotInStore$ = createEffect(() =>
         this.actions$.pipe(
             ofType(loadIfNotInStore),
