@@ -3,13 +3,14 @@ import { Action, createReducer, on } from "@ngrx/store";
 import { add, edited, loadSuccess, reloadSuccess, upsert } from "./currencies.actions";
 import { Currency } from "./currency/model/currency";
 import { CurrencyState } from "./currency/model/currency.state";
+import { StorageConstants } from './storage.constants';
 
 export const currencyAdapter: EntityAdapter<Currency> = createEntityAdapter<Currency>({});
 
 export const initialState: CurrencyState = currencyAdapter.getInitialState({ loaded: false });
 
 function getinitialState(): CurrencyState {
-  const storage = localStorage.getItem('__currencies_storage__');
+  const storage = localStorage.getItem(StorageConstants.CURRENCIES_STORAGE);
   if (storage) {
     const savedState = JSON.parse(storage) || initialState;
     return savedState;

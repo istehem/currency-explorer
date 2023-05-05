@@ -12,9 +12,9 @@ import { currencyHistoryStateFeatureKey } from "./model/currency.history.state";
 import { CurrencyHistoryEffects } from "../currency.history.effects";
 import { currencyReducer } from "../currencies.reducer";
 import { historyReducer } from "../currency.history.reducer";
-import { currenciesMetaReducers } from "../currencies.meta.reducer";
+import { currenciesMetaReducers } from "../currencies.meta.reducers";
 import { NgxEchartsModule } from 'ngx-echarts';
-import { currencyHistoryMetaReducers } from "../currency.history.meta.reducer";
+import { currencyHistoryMetaReducers } from "../currency.history.meta.reducers";
 
 
 @NgModule({

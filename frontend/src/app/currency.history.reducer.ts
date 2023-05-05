@@ -3,6 +3,7 @@ import { Action, createReducer, on } from "@ngrx/store";
 import { addAfterLoadSuccess, addSuccess, newPrice } from "./currency.history.actions";
 import { CurrencyHistory } from "./currency/model/currency.history";
 import { CurrencyHistoryState } from "./currency/model/currency.history.state";
+import { StorageConstants } from "./storage.constants";
 
 export const currencyHistoryAdapter: EntityAdapter<CurrencyHistory>
   = createEntityAdapter<CurrencyHistory>({});
@@ -10,7 +11,7 @@ export const currencyHistoryAdapter: EntityAdapter<CurrencyHistory>
 export const initialState: CurrencyHistoryState = currencyHistoryAdapter.getInitialState({});
 
 function getinitialState(): CurrencyHistoryState {
-  const storage = localStorage.getItem('__currency_history_storage__');
+  const storage = localStorage.getItem(StorageConstants.CURRENCY_HISTORY_STORAGE);
   if (storage) {
     const savedState = JSON.parse(storage) || initialState;
     return savedState;
