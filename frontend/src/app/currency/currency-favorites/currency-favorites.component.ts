@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Currency } from 'src/app/currency/model/currency';
-import { Observable } from 'rxjs';
-import { Store, select } from '@ngrx/store';
-import { isLoaded, selectFavoriteCurrencies } from 'src/app/currencies.selectors';
-import { CurrencyUtil } from '../currency-util';
-import { load, refreshCurrency } from 'src/app/currencies.actions';
-import { CurrencyState } from '../model/currency.state';
 import { Router } from "@angular/router";
+import { Store, select } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { load, refreshCurrency } from 'src/app/currencies.actions';
+import { selectFavoriteCurrencies } from 'src/app/currencies.selectors';
+import { Currency } from 'src/app/currency/model/currency';
+import { CurrencyUtil } from '../currency-util';
+import { CurrencyState } from '../model/currency.state';
 
 @Component({
   selector: 'app-currency-favorites',
@@ -24,13 +24,8 @@ export class CurrencyFavoritesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store.pipe(select(isLoaded)).subscribe(loaded => {
-      if (!loaded) {
-        this.store.dispatch(load());
-      }
-    });
+    this.store.dispatch(load());
   }
-
 
   styleTrend(percent: number): string[] {
     return CurrencyUtil.styleTrend(percent);

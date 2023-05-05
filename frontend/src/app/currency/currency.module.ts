@@ -12,14 +12,17 @@ import { currencyHistoryStateFeatureKey } from "./model/currency.history.state";
 import { CurrencyHistoryEffects } from "../currency.history.effects";
 import { currencyReducer } from "../currencies.reducer";
 import { historyReducer } from "../currency.history.reducer";
+import { currenciesMetaReducers } from "../currencies.meta.reducer";
 import { NgxEchartsModule } from 'ngx-echarts';
+import { currencyHistoryMetaReducers } from "../currency.history.meta.reducer";
+
 
 @NgModule({
     declarations: [CurrencyViewComponent, CurrencyFavoritesComponent, CurrencyDetailsComponent],
     imports: [
         CommonModule,
-        StoreModule.forFeature(currencyStateFeatureKey, currencyReducer),
-        StoreModule.forFeature(currencyHistoryStateFeatureKey, historyReducer),
+        StoreModule.forFeature(currencyStateFeatureKey, currencyReducer, {metaReducers: currenciesMetaReducers}),
+        StoreModule.forFeature(currencyHistoryStateFeatureKey, historyReducer, {metaReducers: currencyHistoryMetaReducers}),
         EffectsModule.forFeature([CurrencyEffects, CurrencyHistoryEffects]),
         NgxEchartsModule.forChild(),
         FormsModule,

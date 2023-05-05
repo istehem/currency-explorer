@@ -8,6 +8,15 @@ export const currencyAdapter: EntityAdapter<Currency> = createEntityAdapter<Curr
 
 export const initialState: CurrencyState = currencyAdapter.getInitialState({ loaded: false });
 
+function getinitialState(): CurrencyState {
+  const storage = localStorage.getItem('__currencies_storage__');
+  if (storage) {
+    const savedState = JSON.parse(storage) || initialState;
+    return savedState;
+  }
+  return initialState;
+}
+
 function addCurrency(currency: Currency, state: CurrencyState): CurrencyState {
   return currencyAdapter.addOne(currency, state);
 }
@@ -52,7 +61,7 @@ function reloadCurrencies(currencies: Currency[], state: CurrencyState) {
   return state;
 }
 
-export const currencies = createReducer(initialState,
+export const currencies = createReducer(getinitialState(),
   on(add, (state, { currency }) => addCurrency(currency, state)),
   on(edited, (state, { currency }) => editCurrency(currency, state)),
   on(loadSuccess, (state, { currencies }) => loadCurrencies(currencies, state)),
@@ -61,5 +70,7 @@ export const currencies = createReducer(initialState,
 );
 
 export function currencyReducer(state: CurrencyState | undefined, action: Action): CurrencyState {
+
+
   return currencies(state, action);
 }
